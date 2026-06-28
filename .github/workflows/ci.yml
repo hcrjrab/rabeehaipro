@@ -59,8 +59,8 @@ jobs:
 
       - name: Run tests
         run: |
-          coverage erase
-          pytest -v --tb=long --cov-report=xml 2>&1
+          python -m coverage run -m pytest -v --tb=long -o "addopts=-ra --strict-markers"
+          python -m coverage xml
         env:
           RABEEH_DATABASE_URL: postgresql+psycopg://rabeeh:rabeeh@localhost:5432/rabeeh
 
