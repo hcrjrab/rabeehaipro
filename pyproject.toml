@@ -1,0 +1,114 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rabeeh-ai-agent-pro"
+version = "0.1.0"
+description = "Production-grade autonomous AI desktop agent."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+authors = [{ name = "Rabeeh AI" }]
+keywords = ["ai", "agent", "automation", "llm", "desktop"]
+
+# Runtime deps. Pinned to minor ranges for reproducibility.
+dependencies = [
+    "fastapi>=0.138,<0.139",
+    "uvicorn[standard]>=0.30,<1",
+    "pydantic>=2.7,<3",
+    "pydantic-settings>=2.4,<3",
+    "httpx>=0.27,<0.29",
+    "cryptography>=43,<46",
+    "python-multipart>=0.0.9",
+    "PyJWT>=2.13,<3",
+]
+
+[project.optional-dependencies]
+# Provider SDKs / heavy capabilities. Installed only when needed so the
+# base install stays small and the app boots offline.
+ollama = ["ollama>=0.3,<0.5"]
+langgraph = ["langgraph>=1.2,<1.3", "langchain-core>=1.4,<2"]
+vector = ["chromadb>=0.5,<0.7"]
+db = ["sqlalchemy>=2.0,<3", "psycopg[binary]>=3.2,<4", "alembic>=1.13,<2", "aiosqlite>=0.20,<0.21"]
+queue = ["celery>=5.4,<6", "redis>=5.0,<6"]
+vision = ["opencv-python>=4.10,<5", "easyocr>=1.7,<2", "pillow>=10,<12"]
+browser = ["playwright>=1.45,<2", "beautifulsoup4>=4.12,<5"]
+office = ["python-docx>=1.1,<2", "openpyxl>=3.1,<4", "python-pptx>=1.0,<2"]
+pdf = ["pypdf>=4.0,<6", "reportlab>=4.0,<5"]
+monitoring = ["opentelemetry-api>=1.27,<2", "prometheus-client>=0.20,<0.22"]
+dev = [
+    "pytest>=8.3,<9",
+    "pytest-asyncio>=0.24,<0.25",
+    "pytest-cov>=5,<7",
+    "ruff>=0.6,<0.9",
+    "mypy>=1.11,<2",
+]
+
+[project.scripts]
+rabeeh = "rabeeh_core.cli:main"
+rabeeh-worker = "rabeeh_core.tasks.worker:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rabeeh_core"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src/rabeeh_core" = "rabeeh_core"
+
+# ---------------------------------------------------------------------------
+# Tooling config
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.3"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-ra --strict-markers --cov=rabeeh_core --cov-report=term-missing"
+filterwarnings = [
+    # Treat our own deprecations as errors, but tolerate third-party noise
+    # from libraries that haven't caught up to Python 3.14 yet.
+    "error::DeprecationWarning:rabeeh_core",
+    "ignore::DeprecationWarning",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["src/rabeeh_core"]
+omit = [
+    "*/__init__.py",
+    "*/tests/*",
+    # Entry points — exercised manually / via container healthchecks
+    "*/cli.py",
+    "*/infra/server.py",
+    # External runtime required — cannot test in CI without their services
+    "*/llm/litellm_provider.py",
+    "*/llm/openrouter.py",
+    "*/llm/ollama.py",
+    "*/llm/capabilities.py",
+    "*/llm/router.py",
+    "*/memory/chroma_store.py",
+    "*/memory/postgres_store.py",
+    "*/memory/knowledge_graph.py",
+    "*/tools/computer.py",
+    "*/tools/browser.py",
+    "*/config/logging.py",
+    "*/config/metrics.py",
+    "*/api/routes/chat.py",
+    "*/tasks/*",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]  # line length handled by formatter
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+files = ["src/rabeeh_core"]

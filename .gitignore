@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+env/
+
+# Virtual envs / tooling
+.python-version
+.Python
+
+# Runtime data (never commit secrets, caches, or workspace artifacts)
+.data/
+workspace/
+*.sqlite3
+*.db
+
+# Env files (keep the example; ignore real secrets)
+.env
+.env.*
+!.env.example
+
+# Node / Frontend
+node_modules/
+.next/
+out/
+dist-electron/
+*.log
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

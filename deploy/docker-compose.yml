@@ -1,0 +1,99 @@
+name: rabeeh
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rabeeh-postgres
+    environment:
+      POSTGRES_USER: rabeeh
+      POSTGRES_PASSWORD: rabeeh
+      POSTGRES_DB: rabeeh
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rabeeh -d rabeeh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: rabeeh-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rabeeh-ollama
+    profiles:
+      - llm
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama --version || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: rabeeh-backend
+    environment:
+      RABEEH_ENV: ${RABEEH_ENV:-production}
+      RABEEH_DEBUG: ${RABEEH_DEBUG:-false}
+      RABEEH_LOG_LEVEL: ${RABEEH_LOG_LEVEL:-INFO}
+      RABEEH_SECRET_KEY: ${RABEEH_SECRET_KEY:-change-me-in-production}
+      RABEEH_JWT_SECRET: ${RABEEH_JWT_SECRET:-change-me-in-production}
+      RABEEH_APPROVAL_LEVEL: ${RABEEH_APPROVAL_LEVEL:-destructive}
+      RABEEH_DATABASE_URL: postgresql+psycopg://rabeeh:rabeeh@postgres:5432/rabeeh
+      RABEEH_REDIS_URL: redis://redis:6379/0
+      RABEEH_OLLAMA_BASE_URL: http://ollama:11434
+      RABEEH_DEFAULT_PROVIDER: ${RABEEH_DEFAULT_PROVIDER:-mock}
+      RABEEH_PREFER_LOCAL: ${RABEEH_PREFER_LOCAL:-true}
+      RABEEH_OLLAMA_DEFAULT_MODEL: ${RABEEH_OLLAMA_DEFAULT_MODEL:-qwen2.5:7b}
+      RABEEH_MAX_ORCHESTRATOR_ITERATIONS: ${RABEEH_MAX_ORCHESTRATOR_ITERATIONS:-20}
+      RABEEH_AGENT_TEMPERATURE: ${RABEEH_AGENT_TEMPERATURE:-0.2}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: rabeeh-frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_data:
