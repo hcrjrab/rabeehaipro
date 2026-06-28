@@ -55,6 +55,12 @@ class BusinessRepository:
     def _to_dict(obj: Any) -> dict[str, Any]:
         return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
 
+    @staticmethod
+    def _item_dict(item: Any, parent_fk: str) -> dict[str, Any]:
+        d = {c.name: getattr(item, c.name) for c in item.__table__.columns}
+        d.pop(parent_fk, None)
+        return d
+
     # ------------------------------------------------------------------
     # Customers
     # ------------------------------------------------------------------
@@ -254,7 +260,7 @@ class BusinessRepository:
     async def _quotation_to_dict(self, sess: AsyncSession, r: Quotation) -> dict[str, Any]:
         await sess.refresh(r, ["items"])
         d = self._to_dict(r)
-        d["items"] = [self._to_dict(i) for i in r.items]
+        d["items"] = [self._item_dict(i, "quotation_id") for i in r.items]
         return d
 
     # ------------------------------------------------------------------
@@ -316,7 +322,7 @@ class BusinessRepository:
     async def _invoice_to_dict(self, sess: AsyncSession, r: Invoice) -> dict[str, Any]:
         await sess.refresh(r, ["items"])
         d = self._to_dict(r)
-        d["items"] = [self._to_dict(i) for i in r.items]
+        d["items"] = [self._item_dict(i, "invoice_id") for i in r.items]
         return d
 
     # ------------------------------------------------------------------
@@ -380,7 +386,7 @@ class BusinessRepository:
     async def _po_to_dict(self, sess: AsyncSession, r: PurchaseOrder) -> dict[str, Any]:
         await sess.refresh(r, ["items"])
         d = self._to_dict(r)
-        d["items"] = [self._to_dict(i) for i in r.items]
+        d["items"] = [self._item_dict(i, "po_id") for i in r.items]
         return d
 
     # ------------------------------------------------------------------
@@ -429,7 +435,7 @@ class BusinessRepository:
     async def _boq_to_dict(self, sess: AsyncSession, r: BOQ) -> dict[str, Any]:
         await sess.refresh(r, ["items"])
         d = self._to_dict(r)
-        d["items"] = [self._to_dict(i) for i in r.items]
+        d["items"] = [self._item_dict(i, "boq_id") for i in r.items]
         return d
 
     # ------------------------------------------------------------------
@@ -583,7 +589,7 @@ class BusinessRepository:
     ) -> dict[str, Any]:
         await sess.refresh(r, ["items"])
         d = self._to_dict(r)
-        d["items"] = [self._to_dict(i) for i in r.items]
+        d["items"] = [self._item_dict(i, "estimation_id") for i in r.items]
         return d
 
     # ------------------------------------------------------------------

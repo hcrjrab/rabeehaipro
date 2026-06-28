@@ -280,7 +280,7 @@ class EstimationItem(Base):
         nullable=False,
         index=True,
     )
-    item_code: Mapped[str] = mapped_column(String(64))
+    item_code: Mapped[str] = mapped_column(String(64), default="")
     description: Mapped[str] = mapped_column(Text, nullable=False)
     quantity: Mapped[Decimal] = mapped_column(Numeric(12, 2), default=Decimal("1.00"))
     unit: Mapped[str] = mapped_column(String(32), default="Each")
