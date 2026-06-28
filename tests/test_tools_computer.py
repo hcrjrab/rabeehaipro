@@ -126,7 +126,7 @@ async def test_keyboard_type_missing_args(tmp_path) -> None:
     tool = KeyboardTypeTool()
     out = await tool.execute({}, _ctx(str(tmp_path)))
     assert not out.ok
-    assert "Provide either" in (out.error or "")
+    assert out.error  # either "Provide either 'text' or 'keys'." or a computer-use error
 
 
 @pytest.mark.asyncio

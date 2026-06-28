@@ -154,6 +154,7 @@ class RequestTimingMiddleware(BaseHTTPMiddleware):
         path = request.url.path
 
         _log.debug("Request started: %s %s", method, path)
+        response = None
         try:
             response = await call_next(request)
             return response
