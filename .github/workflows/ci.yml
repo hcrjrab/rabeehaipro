@@ -58,7 +58,9 @@ jobs:
         run: mypy
 
       - name: Run tests
-        run: pytest -v --tb=long --cov-report=xml
+        run: |
+          python -m coverage run --branch -m pytest -v --tb=long -o "addopts=-ra --strict-markers" 2>&1
+          python -m coverage xml
         env:
           RABEEH_DATABASE_URL: postgresql+psycopg://rabeeh:rabeeh@localhost:5432/rabeeh
 
