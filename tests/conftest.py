@@ -36,11 +36,13 @@ def _reset_singletons() -> Iterator[None]:
     reset_registry()
     reset_orchestrator()
     reset_repository()
+    db_module._available = None
     yield
     get_settings.cache_clear()
     reset_registry()
     reset_orchestrator()
     reset_repository()
+    db_module._available = None
 
 
 @pytest.fixture()

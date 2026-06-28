@@ -58,7 +58,9 @@ jobs:
         run: mypy
 
       - name: Run tests
-        run: pytest --cov-report=xml
+        run: |
+          coverage erase
+          pytest -v --tb=long --cov-report=xml 2>&1
         env:
           RABEEH_DATABASE_URL: postgresql+psycopg://rabeeh:rabeeh@localhost:5432/rabeeh
 

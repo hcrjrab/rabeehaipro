@@ -2,14 +2,11 @@
 
 from __future__ import annotations
 
-import os
 from uuid import UUID, uuid4
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-os.environ["DATABASE_URL"] = "sqlite://"
 
 from rabeeh_core.api.app import create_app
 from rabeeh_core.business.repository import (
