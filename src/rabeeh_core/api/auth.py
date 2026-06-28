@@ -20,7 +20,7 @@ import time
 from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from datetime import timedelta
-from typing import Any
+from typing import Any, cast
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -115,7 +115,7 @@ def create_access_token(
         }
     )
     secret = settings.jwt_secret.get_secret_value()
-    return jwt.encode(to_encode, secret, algorithm=settings.jwt_algorithm)
+    return cast(str, jwt.encode(to_encode, secret, algorithm=settings.jwt_algorithm))
 
 
 def create_refresh_token(data: dict[str, Any]) -> str:
@@ -130,7 +130,7 @@ def create_refresh_token(data: dict[str, Any]) -> str:
     expire = now + settings.refresh_token_ttl_minutes * 60
     to_encode.update({"exp": expire, "iat": now, "jti": _gen_jti()})
     secret = settings.jwt_secret.get_secret_value()
-    return jwt.encode(to_encode, secret, algorithm=settings.jwt_algorithm)
+    return cast(str, jwt.encode(to_encode, secret, algorithm=settings.jwt_algorithm))
 
 
 # ---------------------------------------------------------------------------

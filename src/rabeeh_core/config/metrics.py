@@ -39,10 +39,10 @@ try:
     prometheus_available = True
     _log.debug("prometheus_client found -- metrics are live")
 except ImportError:
-    HTTP_REQUEST_DURATION = cast(Histogram, None)
-    HTTP_REQUEST_COUNT = cast(Counter, None)
-    HTTP_ERROR_COUNT = cast(Counter, None)
-    ACTIVE_REQUESTS = cast(Gauge, None)
+    HTTP_REQUEST_DURATION = None
+    HTTP_REQUEST_COUNT = None
+    HTTP_ERROR_COUNT = None
+    ACTIVE_REQUESTS = None
     prometheus_available = False
     _log.info("prometheus_client not installed; request metrics are no-ops")
 

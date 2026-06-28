@@ -34,7 +34,7 @@ async def create_task(payload: TaskCreate) -> dict[str, object]:
     synchronously and returns the full snapshot on fallback.
     """
     try:
-        from ..tasks.orchestrator_tasks import run_goal as run_goal_task
+        from ...tasks.orchestrator_tasks import run_goal as run_goal_task
     except ImportError:
         run_goal_task = None
 
