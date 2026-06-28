@@ -112,3 +112,17 @@ strict = true
 warn_unused_ignores = true
 ignore_missing_imports = true
 files = ["src/rabeeh_core"]
+
+# Windows-only ctypes — windll doesn't exist on Linux; type: ignores used on one platform but
+# flagged as "unused" on the other. Silence the platform-specific noise.
+[[tool.mypy.overrides]]
+module = "rabeeh_core.tools.computer"
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = "rabeeh_core.orchestration.graph"
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = "rabeeh_core.memory.chroma_store"
+warn_unused_ignores = false

@@ -13,7 +13,7 @@ import contextlib
 import logging
 import uuid as _uuid
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from .base import MemoryKind, MemoryRecord, MemoryScope
 
@@ -28,8 +28,8 @@ try:
 except ImportError:  # pragma: no cover
     CHROMA_ENABLED = False
     _log.warning("chromadb not installed; vector memory unavailable.")
-    chromadb = None  # type: ignore[assignment]
-    ChromaSettings = None  # type: ignore[assignment,misc]
+    chromadb = cast(Any, None)
+    ChromaSettings = cast(Any, None)  # type: ignore[misc]
 
 
 class ChromaMemoryStore:

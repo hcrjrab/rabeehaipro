@@ -62,14 +62,16 @@ class UserResponse(BaseModel):
 def _verify_password(plain: str, hashed: str) -> bool:
     """Compare a plaintext password against a bcrypt hash."""
     try:
-        return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+        ok: bool = bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+        return ok
     except (ValueError, TypeError):
         return False
 
 
 def _hash_password(plain: str) -> str:
     """Return the bcrypt hash of *plain*."""
-    return bcrypt.hashpw(plain.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    hashed: str = bcrypt.hashpw(plain.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    return hashed
 
 
 # ---------------------------------------------------------------------------

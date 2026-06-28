@@ -208,12 +208,12 @@ class WindowListTool(_ComputerTool):
             import ctypes
             from ctypes import wintypes
 
-            EnumWindows = ctypes.windll.user32.EnumWindows
-            GetWindowTextW = ctypes.windll.user32.GetWindowTextW
-            IsWindowVisible = ctypes.windll.user32.IsWindowVisible
-            GetWindowRect = ctypes.windll.user32.GetWindowRect
+            EnumWindows = ctypes.windll.user32.EnumWindows  # type: ignore[attr-defined]
+            GetWindowTextW = ctypes.windll.user32.GetWindowTextW  # type: ignore[attr-defined]
+            IsWindowVisible = ctypes.windll.user32.IsWindowVisible  # type: ignore[attr-defined]
+            GetWindowRect = ctypes.windll.user32.GetWindowRect  # type: ignore[attr-defined]
 
-            WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+            WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)  # type: ignore[attr-defined]
             windows: list[dict[str, Any]] = []
 
             def _callback(hwnd: int, _lparam: int) -> bool:
@@ -407,11 +407,11 @@ class WindowFocusTool(_ComputerTool):
 
         title_sub = str(args["title"]).lower()
 
-        EnumWindows = ctypes.windll.user32.EnumWindows
-        GetWindowTextW = ctypes.windll.user32.GetWindowTextW
-        IsWindowVisible = ctypes.windll.user32.IsWindowVisible
-        SetForegroundWindow = ctypes.windll.user32.SetForegroundWindow
-        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+        EnumWindows = ctypes.windll.user32.EnumWindows  # type: ignore[attr-defined]
+        GetWindowTextW = ctypes.windll.user32.GetWindowTextW  # type: ignore[attr-defined]
+        IsWindowVisible = ctypes.windll.user32.IsWindowVisible  # type: ignore[attr-defined]
+        SetForegroundWindow = ctypes.windll.user32.SetForegroundWindow  # type: ignore[attr-defined]
+        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)  # type: ignore[attr-defined]
 
         found = None
 
@@ -459,12 +459,12 @@ class WindowCloseTool(_ComputerTool):
 
         title_sub = str(args["title"]).lower()
 
-        EnumWindows = ctypes.windll.user32.EnumWindows
-        GetWindowTextW = ctypes.windll.user32.GetWindowTextW
-        IsWindowVisible = ctypes.windll.user32.IsWindowVisible
-        PostMessageW = ctypes.windll.user32.PostMessageW
+        EnumWindows = ctypes.windll.user32.EnumWindows  # type: ignore[attr-defined]
+        GetWindowTextW = ctypes.windll.user32.GetWindowTextW  # type: ignore[attr-defined]
+        IsWindowVisible = ctypes.windll.user32.IsWindowVisible  # type: ignore[attr-defined]
+        PostMessageW = ctypes.windll.user32.PostMessageW  # type: ignore[attr-defined]
         WM_CLOSE = 0x0010
-        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)  # type: ignore[attr-defined]
 
         closed = []
 
@@ -518,11 +518,11 @@ class WindowResizeTool(_ComputerTool):
         width = int(args["width"])
         height = int(args["height"])
 
-        EnumWindows = ctypes.windll.user32.EnumWindows
-        GetWindowTextW = ctypes.windll.user32.GetWindowTextW
-        IsWindowVisible = ctypes.windll.user32.IsWindowVisible
-        MoveWindow = ctypes.windll.user32.MoveWindow
-        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+        EnumWindows = ctypes.windll.user32.EnumWindows  # type: ignore[attr-defined]
+        GetWindowTextW = ctypes.windll.user32.GetWindowTextW  # type: ignore[attr-defined]
+        IsWindowVisible = ctypes.windll.user32.IsWindowVisible  # type: ignore[attr-defined]
+        MoveWindow = ctypes.windll.user32.MoveWindow  # type: ignore[attr-defined]
+        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)  # type: ignore[attr-defined]
 
         found = None
 

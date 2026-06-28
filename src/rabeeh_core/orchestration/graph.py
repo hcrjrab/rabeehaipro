@@ -87,9 +87,11 @@ class GraphOrchestrator:
         langgraph is imported lazily here so the module imports cleanly even
         when the extra is not installed.
         """
+        from typing import Any as _Any
+
         from langgraph.graph import END, START, StateGraph
 
-        builder: StateGraph = StateGraph(dict)  # type: ignore[type-arg]
+        builder: _Any = StateGraph(dict)  # type: ignore[type-arg]
 
         builder.add_node("plan", self._node_plan)  # type: ignore[type-var]
         builder.add_node("execute", self._node_execute)  # type: ignore[type-var]
