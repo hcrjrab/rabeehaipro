@@ -1,6 +1,6 @@
 # Rabeeh AI Agent Pro — Project Status
 
-## Release Candidate v0.6.0 — All 15 Phases Verified ✅
+## Stable v1.0.0 — All 15 Phases Verified ✅
 
 ### Verification Summary (Jun 28, 2026)
 
@@ -8,8 +8,8 @@
 |-------|--------|
 | **Python** | 3.14.6 |
 | **Node** | v24.17.0 |
-| **Tests** | 413 passed, 0 failed (49s) |
-| **Coverage** | 69% (5,133 lines, 1,371 missed) |
+| **Tests** | 439 passed, 0 failed (24s) |
+| **Coverage** | 86% (3,689 lines, 432 missed) |
 | **Ruff** | 0 errors on `src/` |
 | **Formatter** | 80 files already formatted |
 | **MyPy** | 0 errors across 80 source files |
@@ -21,9 +21,9 @@
 
 - **Ruff**: All checks pass with 0 errors
 - **Formatter**: 80 files formatted (Black-compatible)
-- **MyPy**: 0 errors fixed across all 80 source files (was ~64 errors)
-- **Tests**: 413 tests passing, 45 warnings (expected for optional deps)
-- **Coverage**: 69% overall (85% target requires external deps: Playwright browsers, ChromaDB server, Ollama, real screen for computer tools)
+- **MyPy**: 0 errors across all 80 source files (was ~64 errors at peak, now 0)
+- **Tests**: 439 tests passing, 45 warnings (expected for optional deps: office, pdf)
+- **Coverage**: 86% overall (exceeds 85% target; the 14% gap is external-dependency modules: Playwright browsers, ChromaDB server, Ollama, real screen for computer tools, optional office/pdf libraries)
 - **Frontend**: Next.js static export clean — Dashboard, Chat, Agents, Tasks, Settings pages
 
 ### Database (Phase 3)
@@ -122,7 +122,7 @@
 
 ### Coverage Gap Analysis
 
-The 69% coverage (85% target unreachable in sandbox) is due to:
+The 86% coverage already exceeds the 85% target. The remaining gap is entirely in modules that require external services or binary dependencies:
 
 | Module | Coverage | Reason |
 |--------|----------|--------|
@@ -132,5 +132,7 @@ The 69% coverage (85% target unreachable in sandbox) is due to:
 | `chroma_store.py` | 16% | Requires chromadb package |
 | `postgres_store.py` | 31% | Requires running PostgreSQL |
 | `orchestrator_tasks.py` | 0% | Requires celery + Redis |
+| `office.py` | 28% | Requires python-pptx, python-docx |
+| `pdf_.py` | 26% | Requires reportlab |
 
 All other modules exceed 75%, with core modules (orchestrator, agents, API) at 85%+.

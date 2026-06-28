@@ -16,6 +16,7 @@ from pathlib import Path
 
 import pytest
 
+from rabeeh_core.business.repository import reset_business_repository
 from rabeeh_core.config.settings import get_settings
 from rabeeh_core.llm.mock import MockLLMClient
 from rabeeh_core.orchestration.runner import Orchestrator, reset_orchestrator
@@ -36,12 +37,14 @@ def _reset_singletons() -> Iterator[None]:
     reset_registry()
     reset_orchestrator()
     reset_repository()
+    reset_business_repository()
     db_module._available = None
     yield
     get_settings.cache_clear()
     reset_registry()
     reset_orchestrator()
     reset_repository()
+    reset_business_repository()
     db_module._available = None
 
 

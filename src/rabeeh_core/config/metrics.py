@@ -8,7 +8,6 @@ metric is ``None`` and the monitoring middleware becomes a no-op.
 from __future__ import annotations
 
 import logging
-from typing import cast
 
 _log = logging.getLogger(__name__)
 
@@ -39,10 +38,10 @@ try:
     prometheus_available = True
     _log.debug("prometheus_client found -- metrics are live")
 except ImportError:
-    HTTP_REQUEST_DURATION = None
-    HTTP_REQUEST_COUNT = None
-    HTTP_ERROR_COUNT = None
-    ACTIVE_REQUESTS = None
+    HTTP_REQUEST_DURATION = None  # type: ignore[assignment]
+    HTTP_REQUEST_COUNT = None  # type: ignore[assignment]
+    HTTP_ERROR_COUNT = None  # type: ignore[assignment]
+    ACTIVE_REQUESTS = None  # type: ignore[assignment]
     prometheus_available = False
     _log.info("prometheus_client not installed; request metrics are no-ops")
 

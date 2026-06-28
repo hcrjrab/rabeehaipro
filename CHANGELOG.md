@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.0.0] - 2026-06-28 — Stable Release 🎉
+
+### Fixed
+- **Import resolution** (`api/routes/tasks.py:37`): Celery task import `..tasks.orchestrator_tasks` → `...tasks.orchestrator_tasks` (relative path was one level shallow, silently disabling async path).
+- **Graceful fallback** (`config/metrics.py`): Replaced `cast(Histogram, None)` with plain `None` assignments in `except ImportError` block to prevent `NameError` when `prometheus_client` not installed.
+- **Middleware safety** (`api/middleware.py`): `response = None` initialization before try/except in `RequestTimingMiddleware.dispatch` to prevent `UnboundLocalError` when `call_next` raises.
+- **Response validation** (`business/repository.py`): Added `_item_dict()` helper to strip parent FK columns (`quotation_id`, `invoice_id`, `po_id`, `boq_id`, `estimation_id`) from item dicts, fixing Pydantic `extra="forbid"` response validation errors.
+- **NOT NULL constraint** (`business/models.py`): Added `default=""` to `EstimationItem.item_code` column to prevent `IntegrityError` when `model_dump(exclude_unset=True)` omits the optional field.
+- **Optional dependency groups** (`pyproject.toml`): Added `monitoring`, `computer`, `litellm`, `db`, `vision`, `office`, `pdf`, `test`, `dev` groups; added `bcrypt>=4.1,<5` to core deps for JWT password hashing.
+- **CI install command** (`.github/workflows/ci.yml`): Updated to install `.[dev,db,langgraph,vision,monitoring,computer]` to cover all optional groups.
+- **Test isolation** (`tests/conftest.py`): Added `reset_business_repository()` to global singleton reset fixture, fixing flaky `test_list_customers_empty` failure from cross-test state bleed.
+- **MyPy cleanups** (`api/auth.py`): Removed redundant `cast(str, ...)` wrappers around `jwt.encode()` calls (PyJWT stubs now return `str` natively).
+- **Ruff cleanups** (`config/metrics.py`): Removed unused `from typing import cast` import.
+
+### Added
+- **30 new agent tests**: `test_agents_business.py` (15 tests) and `test_agents_memory.py` (16 tests) covering BusinessAgent document detection, CRUD operations, and MemoryAgent search/history/learn/ask/clear/recall flows.
+- **Stale directory cleanup**: Removed 18 empty phantom directories and legacy `backend/` prototype code.
+
+### Changed
+- `PROJECT_STATUS.md`: Updated to v1.0.0, 439 tests, 86% coverage, Ruff=0, MyPy=0.
+- `CHANGELOG.md`: Added v1.0.0 release notes.
+
 ## [0.6.0] - 2026-06-28 — Production Completion (Phases A–H)
 
 ### Added

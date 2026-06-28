@@ -4,10 +4,10 @@ A production-grade autonomous AI desktop agent framework — comparable in
 ambition to OpenAI Operator, Claude Computer Use, Manus AI, Browser Use,
 Open Interpreter, and AutoGen.
 
-> **Status:** Release Candidate (v0.6.0) — 413 tests passing, 0 mypy errors,
-> Ruff clean, frontend build green. Ready for production hardening.
+> **Status:** Stable (v1.0.0) — 439 tests passing, 0 mypy errors,
+> Ruff clean, 86% coverage, frontend build green.
 
-## What's in this repository (v0.6.0)
+## What's in this repository (v1.0.0)
 
 A full-stack autonomous AI agent framework with 11 specialist agent roles,
 22+ tools, dual orchestrators, persistent memory, and a dark-themed Next.js UI.
@@ -89,8 +89,8 @@ docker compose -f deploy/docker-compose.yml up -d   # postgres + redis + ollama
                   └────────────────┘    └───────────────────┘
                           │
                   ┌───────▼────────┐
-                  │  MemoryStore   │  conversation / project / long-term
-                  │ in-memory now  │  ChromaDB in Phase 5
+  │  MemoryStore   │  conversation / vector / knowledge graph
+  │ 4 backends     │  in-memory, Postgres, ChromaDB, SQLite KG
                   └────────────────┘
 ```
 
@@ -127,7 +127,7 @@ src/rabeeh_core/
   infra/       ASGI entrypoint, Celery worker
   tasks/       Celery async task wrappers
   cli.py       `rabeeh` console script (serve/run/info)
-tests/         413 tests (pytest, coverage ~69%)
+tests/         439 tests (pytest, coverage 86%)
 alembic/       DB migration scripts (14 tables)
 frontend/      Next.js + Electron dark UI
 deploy/        docker-compose for postgres/redis/ollama
